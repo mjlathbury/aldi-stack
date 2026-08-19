@@ -354,124 +354,167 @@
 
   // ---- Detailed Warehouse & Pallet Drawing ----
   function drawWarehouseBackground() {
-    // 1. Concrete / Brick Wall
-    ctx.fillStyle = '#262f3e';
+    // 1. Warm cinder block wall (matches reference image tones)
+    ctx.fillStyle = '#4a4f47';
     ctx.fillRect(0, 0, W, H);
 
-    // Brick pattern
-    ctx.strokeStyle = '#1b2330';
+    // Cinder block mortar lines - horizontal and vertical grid
+    ctx.strokeStyle = '#3a3f38';
     ctx.lineWidth = 1;
-    const brickH = 20;
-    const brickW = 40;
-    for (let y = 0; y < H; y += brickH) {
+    const blockH = 26;
+    const blockW = 52;
+    for (let y = 0; y < H; y += blockH) {
       ctx.beginPath();
       ctx.moveTo(0, y);
       ctx.lineTo(W, y);
       ctx.stroke();
     }
-
-    // 2. Heavy Metal Industrial Shelving Units on Left
-    ctx.fillStyle = '#334155'; // shelf steel uprights
-    ctx.fillRect(30, 0, 14, H);
-    ctx.fillRect(160, 0, 14, H);
-
-    // Shelf crossbars & cardboard boxes
-    for (let sy = 80; sy < H; sy += 160) {
-      ctx.fillStyle = '#475569';
-      ctx.fillRect(20, sy, 160, 10);
-
-      // Cardboard crates with 'X' cross braces on shelves
-      drawShelfCrate(45, sy - 45, 45, 45);
-      drawShelfCrate(100, sy - 55, 55, 55);
+    for (let x = 0; x < W; x += blockW) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, H);
+      ctx.stroke();
     }
 
-    // 3. Worker in Blue Shirt & Glasses (Pixel Sprite representation on the right)
-    drawWarehouseWorker(W - 120, H - BOTTOM_PAD - 80);
+    // 2. Concrete floor gradient (warm gray, matches reference)
+    const floorGrad = ctx.createLinearGradient(0, H * 0.6, 0, H);
+    floorGrad.addColorStop(0, '#5a554e');
+    floorGrad.addColorStop(1, '#443f39');
+    ctx.fillStyle = floorGrad;
+    ctx.fillRect(0, H * 0.6, W, H * 0.4);
+
+    // 3. Metal shelving - blue-gray uprights with orange shelf beams
+    ctx.fillStyle = '#4a6a8a'; // blue-gray steel uprights
+    ctx.fillRect(28, 0, 16, H);
+    ctx.fillRect(172, 0, 16, H);
+
+    // Shelf beams (orange, matches reference)
+    ctx.fillStyle = '#c5622a';
+    ctx.fillRect(20, 70, 180, 10);
+    ctx.fillRect(20, 220, 180, 10);
+    ctx.fillRect(20, 370, 180, 10);
+
+    // Cardboard crates with X cross braces on shelves
+    drawShelfCrate(35, 30, 50, 40);
+    drawShelfCrate(100, 10, 55, 50);
+    drawShelfCrate(35, 180, 50, 40);
+    drawShelfCrate(100, 160, 55, 50);
+    drawShelfCrate(35, 330, 50, 40);
+    drawShelfCrate(100, 310, 55, 50);
+
+    // 4. Conveyor belt on right side
+    ctx.fillStyle = '#5a6a7a';
+    ctx.fillRect(W - 220, H * 0.35, 200, 60);
+    ctx.fillStyle = '#3a4a5a';
+    ctx.fillRect(W - 210, H * 0.37, 180, 20);
+    // Conveyor rollers
+    for (let cx = W - 200; cx < W - 40; cx += 16) {
+      ctx.fillStyle = '#7a8a9a';
+      ctx.fillRect(cx, H * 0.44, 8, 8);
+    }
+
+    // 5. Worker in blue shirt & glasses
+    drawWarehouseWorker(W - 140, H - BOTTOM_PAD - 60);
   }
 
   function drawShelfCrate(x, y, w, h) {
-    ctx.fillStyle = '#b45309'; // cardboard brown
+    // Cardboard brown (matches reference)
+    ctx.fillStyle = '#b4824a';
     ctx.fillRect(x, y, w, h);
-    ctx.strokeStyle = '#78350f';
+    // Dark outline
+    ctx.strokeStyle = '#6b4a2a';
     ctx.lineWidth = 2;
     ctx.strokeRect(x, y, w, h);
 
-    // X cross-bracing tape
+    // X cross-bracing tape (matches reference crates)
+    ctx.strokeStyle = '#7a5a3a';
+    ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.moveTo(x, y); ctx.lineTo(x + w, y + h);
-    ctx.moveTo(x + w, y); ctx.lineTo(x, y + h);
+    ctx.moveTo(x + 4, y + 4); ctx.lineTo(x + w - 4, y + h - 4);
+    ctx.moveTo(x + w - 4, y + 4); ctx.lineTo(x + 4, y + h - 4);
     ctx.stroke();
+
+    // Tape seal on top
+    ctx.fillStyle = '#8a6a4a';
+    ctx.fillRect(x + w / 2 - 8, y, 16, 4);
   }
 
   function drawWarehouseWorker(x, y) {
     ctx.save();
     ctx.translate(x, y);
-    // Blue shirt
-    ctx.fillStyle = '#2563eb';
-    ctx.fillRect(10, 18, 24, 30);
+    // Blue shirt (matches reference)
+    ctx.fillStyle = '#3a8ad0';
+    ctx.fillRect(12, 18, 28, 34);
     // Black pants
-    ctx.fillStyle = '#0f172a';
-    ctx.fillRect(14, 48, 8, 28);
-    ctx.fillRect(24, 48, 8, 28);
-    // Head & hair
-    ctx.fillStyle = '#fde68a';
-    ctx.fillRect(14, 2, 16, 16);
-    ctx.fillStyle = '#d97706'; // blonde hair
-    ctx.fillRect(14, 0, 16, 6);
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(16, 52, 10, 30);
+    ctx.fillRect(28, 52, 10, 30);
+    // Head & skin
+    ctx.fillStyle = '#d07060';
+    ctx.fillRect(16, 4, 18, 18);
+    // Blonde hair
+    ctx.fillStyle = '#e0a030';
+    ctx.fillRect(16, 0, 18, 6);
     // Glasses
     ctx.fillStyle = '#000';
-    ctx.fillRect(18, 7, 8, 3);
+    ctx.fillRect(20, 8, 10, 4);
+    // Arms holding pallet
+    ctx.fillStyle = '#d07060';
+    ctx.fillRect(8, 28, 10, 8);
+    ctx.fillRect(34, 28, 10, 8);
     ctx.restore();
   }
 
   function drawPalletBlock(x, worldBottom, w, type) {
     const y = toScreenY(worldBottom, BLOCK_H);
 
-    // Realistic Wooden Pallet Structure
-    // Top deck boards
-    ctx.fillStyle = '#d97706'; // light wood
-    ctx.fillRect(x, y, w, 8);
-    ctx.fillStyle = '#b45309';
-    ctx.fillRect(x, y + 8, w, 6);
+    // Wooden Pallet Structure (matches reference image)
+    // Top deck boards - light warm wood
+    ctx.fillStyle = '#d0a060';
+    ctx.fillRect(x, y, w, 10);
+    // Top deck shadow
+    ctx.fillStyle = '#b08040';
+    ctx.fillRect(x, y + 10, w, 4);
 
-    // Pallet stringer cutouts (dark gaps)
-    ctx.fillStyle = '#1e1b4b';
-    const gapWidth = 24;
-    for (let gx = x + 12; gx < x + w - 12; gx += gapWidth + 16) {
-      ctx.fillRect(gx, y + 14, gapWidth, 12);
+    // Stringer boards with dark cutout gaps (matches reference)
+    ctx.fillStyle = '#1a1a1a';
+    const gapW = 22;
+    const gapH = 10;
+    for (let gx = x + 10; gx < x + w - 10; gx += gapW + 14) {
+      ctx.fillRect(gx, y + 14, gapW, gapH);
     }
 
     // Bottom deck board
-    ctx.fillStyle = '#92400e';
-    ctx.fillRect(x, y + 26, w, 14);
+    ctx.fillStyle = '#906030';
+    ctx.fillRect(x, y + 24, w, 12);
 
     // Cargo Box / Cartons sitting on top of pallet
-    let boxColor = '#a16207';
-    let labelColor = '#3b82f6';
+    let boxColor = '#b08040';
+    let labelColor = '#3a60a0';
     if (type === 'special') {
-      boxColor = '#db2777'; // Special buy pink
-      labelColor = '#fbbf24';
+      boxColor = '#d04080'; // Special buy pink
+      labelColor = '#f0c040';
     } else if (type === 'drinks') {
-      boxColor = '#1d4ed8'; // Drink crates blue
+      boxColor = '#2050a0'; // Drink crates blue
       labelColor = '#ffffff';
     }
 
     // Box body
     ctx.fillStyle = boxColor;
-    ctx.fillRect(x + 4, y - 22, w - 8, 22);
-    ctx.strokeStyle = '#78350f';
+    ctx.fillRect(x + 4, y - 24, w - 8, 24);
+    ctx.strokeStyle = '#4a2a10';
     ctx.lineWidth = 1;
-    ctx.strokeRect(x + 4, y - 22, w - 8, 22);
+    ctx.strokeRect(x + 4, y - 24, w - 8, 24);
 
     // Aldi Label stamp
     if (w > 45) {
       ctx.fillStyle = labelColor;
-      ctx.fillRect(x + w / 2 - 14, y - 16, 28, 10);
-      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(x + w / 2 - 14, y - 18, 28, 10);
+      ctx.fillStyle = '#1a1a1a';
       ctx.font = 'bold 75% "Courier New", monospace';
       ctx.textAlign = 'center';
       let lbl = type === 'special' ? 'SPECIAL' : (type === 'drinks' ? 'DRINKS' : 'ALDI');
-      ctx.fillText(lbl, x + w / 2, y - 9);
+      ctx.fillText(lbl, x + w / 2, y - 11);
     }
   }
 
