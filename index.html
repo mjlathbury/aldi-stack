@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>STACK - Online Leaderboard Edition</title>
+<title>ALDI PALLET STACKER - 8-Bit Edition</title>
 <style>
-  html, body { margin: 0; height: 100%; overflow: hidden; background: #111; user-select: none; -webkit-user-select: none; }
-  canvas { display: block; touch-action: none; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #0b0f19; user-select: none; -webkit-user-select: none; }
+  canvas { display: block; touch-action: none; -webkit-tap-highlight-color: transparent; image-rendering: pixelated; }
   
   /* Input Modal styling */
   #name-modal {
@@ -21,43 +21,41 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-family: system-ui, sans-serif;
-    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    color: #f8fafc;
     padding: 20px;
     box-sizing: border-box;
   }
   .modal-box {
-    background: #1e1e1e;
+    background: #1e293b;
     padding: 30px;
-    border-radius: 16px;
-    border: 2px solid #e040fb;
+    border-radius: 8px;
+    border: 4px solid #f97316; /* Aldi Orange */
     width: 100%;
     max-width: 320px;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(224, 64, 251, 0.2);
+    box-shadow: 0 10px 30px rgba(249, 115, 22, 0.3);
   }
   .modal-box h2 {
     margin: 0 0 10px 0;
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 900;
-    letter-spacing: 1.5px;
-    background: linear-gradient(45deg, #e040fb, #00e5ff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    letter-spacing: 2px;
+    color: #fbbf24; /* Aldi Yellow */
   }
   .modal-box p {
     margin: 0 0 20px 0;
-    font-size: 14px;
-    color: #aaa;
+    font-size: 13px;
+    color: #94a3b8;
     line-height: 1.4;
   }
   .modal-box input {
     width: 100%;
     padding: 14px;
-    border-radius: 8px;
-    border: 2px solid #444;
-    background: #111;
-    color: white;
+    border-radius: 4px;
+    border: 2px solid #475569;
+    background: #0f172a;
+    color: #f8fafc;
     font-size: 20px;
     font-weight: bold;
     text-align: center;
@@ -65,33 +63,33 @@
     margin-bottom: 15px;
     box-sizing: border-box;
     text-transform: uppercase;
-    transition: border-color 0.2s;
+    font-family: 'Courier New', Courier, monospace;
   }
   .modal-box input:focus {
-    border-color: #00e5ff;
+    border-color: #38bdf8;
   }
   .modal-box button {
     width: 100%;
     padding: 14px;
-    border-radius: 8px;
+    border-radius: 4px;
     border: none;
-    background: linear-gradient(45deg, #e040fb, #00e5ff);
+    background: #f97316;
     color: white;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: transform 0.1s, opacity 0.2s;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 0 #c2410c;
   }
   .modal-box button:active {
-    transform: scale(0.98);
-  }
-  .modal-box button:hover {
-    opacity: 0.95;
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #c2410c;
   }
   .error-msg {
-    color: #ff4a4a;
-    font-size: 13px;
-    font-weight: 600;
+    color: #ef4444;
+    font-size: 12px;
+    font-weight: bold;
     margin-bottom: 15px;
     min-height: 18px;
   }
@@ -101,21 +99,19 @@
     position: absolute;
     bottom: 15px;
     left: 15px;
-    font-family: system-ui, sans-serif;
-    color: rgba(255,255,255,0.6);
+    font-family: 'Courier New', Courier, monospace;
+    color: rgba(255,255,255,0.7);
     font-size: 12px;
     font-weight: bold;
-    background: rgba(0,0,0,0.5);
-    padding: 8px 16px;
-    border-radius: 20px;
+    background: rgba(15, 23, 42, 0.8);
+    padding: 8px 14px;
+    border-radius: 4px;
     cursor: pointer;
-    border: 1px solid rgba(255,255,255,0.15);
+    border: 2px solid #334155;
     z-index: 5;
-    transition: background 0.2s, border-color 0.2s;
   }
   #player-profile-badge:hover {
-    background: rgba(0,0,0,0.7);
-    border-color: rgba(255,255,255,0.3);
+    border-color: #f97316;
   }
 </style>
 </head>
@@ -125,14 +121,14 @@
 
 <!-- Profile Badge -->
 <div id="player-profile-badge">
-  PLAYER: <span id="player-badge-name" style="color: #00e5ff;">GUEST</span> (tap to edit)
+  LOADER: <span id="player-badge-name" style="color: #fbbf24;">GUEST</span> (tap to edit)
 </div>
 
 <!-- Name Modal -->
 <div id="name-modal">
   <div class="modal-box">
     <h2 id="modal-title">HIGH SCORE!</h2>
-    <p id="modal-desc">Enter your name for the online leaderboard:</p>
+    <p id="modal-desc">Enter your name for the Warehouse Leaderboard:</p>
     <input type="text" id="player-name-input" maxlength="10" placeholder="YOUR NAME" autocomplete="off" spellcheck="false">
     <div id="name-error" class="error-msg"></div>
     <button id="submit-name-btn">SUBMIT</button>
@@ -143,14 +139,13 @@
 (() => {
   // ---- Firebase Realtime Database Config ----
   const dbUrl = "https://stackerjack-f09ef-default-rtdb.europe-west1.firebasedatabase.app/";
-  
   const useDatabase = dbUrl && dbUrl !== "YOUR_DATABASE_URL";
 
   // ---- Mock Online Leaderboard Fallback ----
   let localScores = [
-    { name: 'HERMES', score: 18, timestamp: Date.now() - 100000 },
-    { name: 'MJL', score: 12, timestamp: Date.now() - 50000 },
-    { name: 'CHAMP', score: 5, timestamp: Date.now() - 20000 }
+    { name: 'SUPERVISOR', score: 25, timestamp: Date.now() - 100000 },
+    { name: 'FORKLIFT', score: 15, timestamp: Date.now() - 50000 },
+    { name: 'STCKER', score: 8, timestamp: Date.now() - 20000 }
   ];
 
   // ---- Offensive Word Filtering List ----
@@ -170,13 +165,14 @@
   const ctx = canvas.getContext('2d');
   let W, H, dpr;
 
-  const BLOCK_H   = 34;   // height of each block
-  const BOTTOM_PAD= 90;   // gap below the base block
-  const PERFECT   = 6;    // px tolerance for a "perfect" drop
+  const BLOCK_H   = 38;   // height of pallet block
+  const BOTTOM_PAD= 100;  // gap below base
+  const PERFECT   = 5;    // px tolerance for perfect snap
 
   let stack, current, debris, floaters, particles;
   let offset, score, best, state, speed, shake, overTime, nextDir, baseWidth, perfectCombo;
-  best = parseInt(localStorage.getItem('stack_best') || '0', 10);
+  let countdownVal = 3, countdownStartTime = 0;
+  best = parseInt(localStorage.getItem('aldi_stack_best') || '0', 10);
 
   // High Scores Mapping
   let scoreToPlayer = {};
@@ -197,35 +193,37 @@
   const topBlock = () => stack[stack.length - 1];
 
   function reset() {
-    baseWidth = Math.min(W * 0.6, 320);
-    const hue = Math.random() * 360;
-    stack = [{ x: (W - baseWidth) / 2, width: baseWidth, hue }];
-    score = 0; speed = 2.4; shake = 0; offset = 0; perfectCombo = 0;
+    baseWidth = Math.min(W * 0.65, 300);
+    stack = [{ x: (W - baseWidth) / 2, width: baseWidth, type: 'pallet' }];
+    score = 0; speed = 2.2; shake = 0; offset = 0; perfectCombo = 0;
     nextDir = Math.random() < 0.5 ? 1 : -1;
     debris = []; floaters = []; particles = [];
     spawnCurrent();
+  }
+
+  function getNextBlockType() {
+    // Every 5th or 7th block can be a special "Middle Aisle" mystery box or drink pallet
+    if (score > 0 && score % 6 === 0) return 'special';
+    if (score > 0 && score % 3 === 0) return 'drinks';
+    return 'pallet';
   }
 
   function spawnCurrent() {
     const t = topBlock();
     current = {
       width: t.width,
-      hue: (t.hue + 6) % 360,
+      type: getNextBlockType(),
       dir: nextDir,
-      x: nextDir === 1 ? 10 : W - 10 - t.width
+      x: nextDir === 1 ? 15 : W - 15 - t.width
     };
   }
 
-  
   function placeSplash() {
     const t = topBlock(), c = current;
     speed = 1.6;
-
-    // Simpler, robust demo stacking logic
     const oStart = Math.max(c.x, t.x);
     const oEnd   = Math.min(c.x + c.width, t.x + t.width);
     const oW     = oEnd - oStart;
-    const slot   = stack.length * BLOCK_H;
 
     if (oW <= 0 || stack.length > 20) {
       reset();
@@ -234,19 +232,8 @@
     }
 
     nextDir *= -1;
-    const delta = c.width - oW;
-    let nx, nw;
-
-    // Occasionally create a slight miss/trim so it's not 100% rigid
-    if (Math.random() < 0.3 && c.width > 60) {
-      nx = oStart + 2;
-      nw = oW - 4;
-    } else {
-      nx = oStart;
-      nw = oW;
-    }
-
-    stack.push({ x: nx, width: nw, hue: c.hue });
+    let nx = oStart, nw = oW;
+    stack.push({ x: nx, width: nw, type: c.type });
     score++;
     spawnCurrent();
   }
@@ -258,10 +245,10 @@
     const oW     = oEnd - oStart;
     const slot   = stack.length * BLOCK_H;
 
-    if (oW <= 0) { // missed entirely
+    if (oW <= 0) { // missed entirely - pallet crashes down
       debris.push({ x: c.x, y: slot, w: c.width, h: BLOCK_H,
-                    vx: c.dir * 2.5, vy: 2, rot: 0,
-                    vr: (Math.random() * 0.1 - 0.05), hue: c.hue });
+                    vx: c.dir * 3, vy: 2, rot: 0,
+                    vr: (Math.random() * 0.15 - 0.075), type: c.type });
       current = null;
       doGameOver();
       return;
@@ -271,67 +258,65 @@
     const delta = c.width - oW;
     let nx, nw;
 
-    if (delta <= PERFECT) { // perfect snap -> keep full width
+    if (delta <= PERFECT) { // perfect alignment!
       nx = t.x; nw = t.width;
       perfectCombo++;
-      perfectFx(slot, c.x + c.width / 2, c.hue);
+      perfectFx(slot, c.x + c.width / 2, c.type);
     } else {
       nx = oStart; nw = oW;
       perfectCombo = 0;
       if (c.x < oStart)
         debris.push({ x: c.x, y: slot, w: oStart - c.x, h: BLOCK_H,
-                      vx: -1.5 - Math.random(), vy: 1.5, rot: 0,
-                      vr: -(Math.random() * 0.08 + 0.02), hue: c.hue });
+                      vx: -1.8 - Math.random(), vy: 1.5, rot: 0,
+                      vr: -(Math.random() * 0.1 + 0.02), type: c.type });
       if (c.x + c.width > oEnd)
         debris.push({ x: oEnd, y: slot, w: c.x + c.width - oEnd, h: BLOCK_H,
-                      vx: 1.5 + Math.random(), vy: 1.5, rot: 0,
-                      vr: (Math.random() * 0.08 + 0.02), hue: c.hue });
+                      vx: 1.8 + Math.random(), vy: 1.5, rot: 0,
+                      vr: (Math.random() * 0.1 + 0.02), type: c.type });
     }
 
-    stack.push({ x: nx, width: nw, hue: c.hue });
+    stack.push({ x: nx, width: nw, type: c.type });
     score++;
-    if (score > best) { best = score; localStorage.setItem('stack_best', best); }
-    speed = Math.min(2.4 + score * 0.16, 7.5);
+    if (score > best) { best = score; localStorage.setItem('aldi_stack_best', best); }
+    speed = Math.min(2.2 + score * 0.15, 7.0);
     spawnCurrent();
   }
 
-  function perfectFx(worldY, cx, hue) {
+  function perfectFx(worldY, cx, type) {
     floaters.push({
-      text: perfectCombo > 1 ? 'PERFECT x' + perfectCombo : 'PERFECT',
-      x: cx, y: worldY + BLOCK_H, life: 1, hue
+      text: perfectCombo > 1 ? 'SPECIAL BUY x' + perfectCombo : 'NAILED IT!',
+      x: cx, y: worldY + BLOCK_H, life: 1, type
     });
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < 16; i++) {
       const a = Math.random() * Math.PI * 2, s = 2 + Math.random() * 3;
       particles.push({ x: cx, y: worldY + BLOCK_H / 2,
                        vx: Math.cos(a) * s, vy: Math.sin(a) * s + 1,
-                       life: 1, hue });
+                       life: 1, type });
     }
   }
 
   function doGameOver() { 
     state = 'over'; 
     overTime = performance.now(); 
-    shake = 1; 
+    shake = 1.2; 
     handleGameOverScore();
   }
 
-  // ---- Update ----
+  // ---- Update Loop ----
   function update() {
     const N = stack.length;
-    let target = H * 0.58 - H + BOTTOM_PAD + (N + 1) * BLOCK_H;
+    let target = H * 0.55 - H + BOTTOM_PAD + (N + 1) * BLOCK_H;
     if (target < 0) target = 0;
     offset += (target - offset) * 0.12;
 
     if ((state === 'playing' || state === 'splash') && current) {
       current.x += current.dir * speed;
-      const minX = 10, maxX = W - 10 - current.width;
+      const minX = 15, maxX = W - 15 - current.width;
       if (current.x <= minX) { current.x = minX; current.dir = 1; }
       else if (current.x >= maxX) { current.x = maxX; current.dir = -1; }
       
-      // If in splash mode, auto-place blocks to show a running demo!
       if (state === 'splash') {
         const t = topBlock();
-        // Place when aligned roughly over the top block with some AI tolerance
         const targetX = t.x + (t.width - current.width) / 2;
         if (Math.abs(current.x - targetX) < speed * 1.2 || (current.dir === 1 && current.x >= targetX) || (current.dir === -1 && current.x <= targetX)) {
           placeSplash();
@@ -368,19 +353,57 @@
         countdownVal = 3;
       }
     }
-
   }
 
-  // ---- Draw ----
-  function drawBlock(x, worldBottom, w, hue) {
+  // ---- 8-Bit Aldi Palette & Sprites Draw ----
+  function drawBlock(x, worldBottom, w, type) {
     const y = toScreenY(worldBottom, BLOCK_H);
-    const grad = ctx.createLinearGradient(0, y, 0, y + BLOCK_H);
-    grad.addColorStop(0, `hsl(${hue},62%,60%)`);
-    grad.addColorStop(1, `hsl(${hue},62%,46%)`);
-    ctx.fillStyle = grad;
-    ctx.fillRect(x, y, w, BLOCK_H);
-    ctx.fillStyle = `hsl(${hue},70%,74%)`;
-    ctx.fillRect(x, y, w, 3); // top highlight
+
+    // Wooden Pallet Base
+    ctx.fillStyle = '#854d0e'; // wood brown
+    ctx.fillRect(x, y + BLOCK_H - 10, w, 10);
+    ctx.fillStyle = '#a16207';
+    ctx.fillRect(x, y + BLOCK_H - 8, w, 4);
+
+    // Vertical pallet slats
+    ctx.fillStyle = '#713f12';
+    for (let px = x + 6; px < x + w - 6; px += 24) {
+      ctx.fillRect(px, y + BLOCK_H - 10, 6, 10);
+    }
+
+    // Cargo Box Styling based on type
+    let boxColor = '#b45309'; // cardboard brown
+    let boxTop = '#d97706';
+    let labelColor = '#3b82f6'; // Aldi blue accent
+
+    if (type === 'special') {
+      boxColor = '#ec4899'; // Middle aisle pink!
+      boxTop = '#f472b6';
+      labelColor = '#fbbf24'; // Aldi yellow star
+    } else if (type === 'drinks') {
+      boxColor = '#1e3a8a'; // Drink crate blue
+      boxTop = '#3b82f6';
+      labelColor = '#ffffff';
+    }
+
+    // Main carton body
+    ctx.fillStyle = boxColor;
+    ctx.fillRect(x + 2, y, w - 4, BLOCK_H - 10);
+
+    // Top lid highlight
+    ctx.fillStyle = boxTop;
+    ctx.fillRect(x + 2, y, w - 4, 4);
+
+    // Retro pixel cassette/label stamp in center
+    if (w > 40) {
+      ctx.fillStyle = labelColor;
+      ctx.fillRect(x + w / 2 - 16, y + 8, 32, 10);
+      ctx.fillStyle = '#0f172a';
+      ctx.font = 'bold 8px "Courier New", monospace';
+      ctx.textAlign = 'center';
+      let labelText = type === 'special' ? 'SPECIAL' : (type === 'drinks' ? 'BRUBRU' : 'ALDI');
+      ctx.fillText(labelText, x + w / 2, y + 16);
+    }
   }
 
   function drawDebris(d) {
@@ -388,69 +411,74 @@
     ctx.save();
     ctx.translate(d.x + d.w / 2, y + d.h / 2);
     ctx.rotate(d.rot);
-    ctx.fillStyle = `hsl(${d.hue},62%,52%)`;
+    ctx.fillStyle = d.type === 'special' ? '#ec4899' : '#b45309';
     ctx.fillRect(-d.w / 2, -d.h / 2, d.w, d.h);
     ctx.restore();
   }
 
-  // Draw Dotted High Score Marks at the TOP of the brick of that score
   function drawHighScoreLines() {
     ctx.save();
     for (const [scoreStr, name] of Object.entries(scoreToPlayer)) {
       const sVal = parseInt(scoreStr, 10);
       if (sVal <= 0) continue;
       
-      // The top of the block with height sVal is at world bottom = sVal * BLOCK_H + BLOCK_H
-      const worldTop = (sVal + 1) * BLOCK_H; // Add 1 to move down one block (or higher position visually)
+      const worldTop = (sVal + 1) * BLOCK_H;
       const sy = H - BOTTOM_PAD - worldTop + offset;
       
-      // Render only if on-screen
       if (sy > 0 && sy < H) {
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.35)';
+        ctx.strokeStyle = 'rgba(249, 115, 22, 0.4)';
         ctx.lineWidth = 2;
-        ctx.setLineDash([6, 6]);
+        ctx.setLineDash([4, 4]);
         
         ctx.beginPath();
-        ctx.moveTo(10, sy);
-        ctx.lineTo(W - 10, sy);
+        ctx.moveTo(15, sy);
+        ctx.lineTo(W - 15, sy);
         ctx.stroke();
         
-        // Draw the badge marker on the right edge
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
-        ctx.font = 'bold 12px system-ui, sans-serif';
+        ctx.fillStyle = '#fbbf24';
+        ctx.font = 'bold 11px "Courier New", monospace';
         ctx.textAlign = 'right';
-        ctx.fillText(`🚩 ${name} (${sVal})`, W - 15, sy - 5);
+        ctx.fillText(`🏆 ${name} (${sVal})`, W - 20, sy - 5);
       }
     }
     ctx.restore();
   }
 
   function draw() {
-    const hue = topBlock().hue;
+    // Warehouse background gradient (Navy industrial)
     const g = ctx.createLinearGradient(0, 0, 0, H);
-    g.addColorStop(0, `hsl(${hue},45%,13%)`);
-    g.addColorStop(1, `hsl(${hue},50%,22%)`);
+    g.addColorStop(0, '#0f172a');
+    g.addColorStop(1, '#1e1b4b');
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, W, H);
 
+    // Warehouse structural support beams in background
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+    ctx.lineWidth = 6;
+    for (let x = 40; x < W; x += 120) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, H);
+      ctx.stroke();
+    }
+
     ctx.save();
     if (shake > 0.01)
-      ctx.translate((Math.random() - 0.5) * shake * 14, (Math.random() - 0.5) * shake * 14);
+      ctx.translate((Math.random() - 0.5) * shake * 12, (Math.random() - 0.5) * shake * 12);
 
     for (let i = 0; i < stack.length; i++) {
       const b = stack[i];
-      drawBlock(b.x, i * BLOCK_H, b.width, b.hue);
+      drawBlock(b.x, i * BLOCK_H, b.width, b.type);
     }
     if (current && state !== 'over' && state !== 'countdown')
-      drawBlock(current.x, stack.length * BLOCK_H, current.width, current.hue);
+      drawBlock(current.x, stack.length * BLOCK_H, current.width, current.type);
     for (const d of debris) drawDebris(d);
 
-    // Draw the high score milestones directly in the world space at the top of the target brick
     drawHighScoreLines();
 
     for (const p of particles) {
       ctx.globalAlpha = Math.max(p.life, 0);
-      ctx.fillStyle = `hsl(${p.hue},70%,65%)`;
+      ctx.fillStyle = p.type === 'special' ? '#ec4899' : '#fbbf24';
       const sy = H - BOTTOM_PAD - p.y + offset;
       ctx.fillRect(p.x - 3, sy - 3, 6, 6);
     }
@@ -458,8 +486,8 @@
 
     for (const f of floaters) {
       ctx.globalAlpha = Math.max(f.life, 0);
-      ctx.fillStyle = `hsl(${f.hue},80%,75%)`;
-      ctx.font = '700 22px system-ui, sans-serif';
+      ctx.fillStyle = f.type === 'special' ? '#f472b6' : '#fbbf24';
+      ctx.font = '900 18px "Courier New", monospace';
       ctx.textAlign = 'center';
       const sy = H - BOTTOM_PAD - f.y + offset;
       ctx.fillText(f.text, f.x, sy);
@@ -473,71 +501,70 @@
   function drawUI() {
     ctx.textAlign = 'center';
     if (state === 'splash') {
-      ctx.fillStyle = 'rgba(0,0,0,0.4)';
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
       ctx.fillRect(0, 0, W, H);
 
-      ctx.fillStyle = 'rgba(255,255,255,0.98)';
-      ctx.font = '800 58px system-ui, sans-serif';
-      ctx.fillText('STACKERJACK', W / 2, H * 0.32);
+      ctx.fillStyle = '#fbbf24'; // Aldi Yellow
+      ctx.font = '900 42px "Courier New", monospace';
+      ctx.fillText('ALDI PALLET', W / 2, H * 0.28);
+      ctx.fillStyle = '#f97316'; // Aldi Orange
+      ctx.fillText('STACKER', W / 2, H * 0.28 + 44);
 
-      ctx.font = '600 18px system-ui, sans-serif';
-      ctx.fillStyle = '#00e5ff';
-      ctx.fillText('ONLINE LEADERBOARD EDITION', W / 2, H * 0.32 + 36);
+      ctx.font = 'bold 14px "Courier New", monospace';
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText('WAREHOUSE EDITION', W / 2, H * 0.28 + 84);
 
-      const pulse = 0.6 + 0.4 * Math.sin(performance.now() / 350);
+      const pulse = 0.6 + 0.4 * Math.sin(performance.now() / 300);
       ctx.globalAlpha = pulse;
       ctx.fillStyle = '#ffffff';
-      ctx.font = '700 22px system-ui, sans-serif';
-      ctx.fillText('TAP TO START', W / 2, H * 0.52);
+      ctx.font = 'bold 20px "Courier New", monospace';
+      ctx.fillText('TAP TO LOAD PALLET', W / 2, H * 0.55);
       ctx.globalAlpha = 1;
 
       if (best > 0) {
-        ctx.fillStyle = 'rgba(255,255,255,0.6)';
-        ctx.font = '500 18px system-ui, sans-serif';
-        ctx.fillText('YOUR BEST: ' + best, W / 2, H * 0.52 + 45);
+        ctx.fillStyle = '#94a3b8';
+        ctx.font = '16px "Courier New", monospace';
+        ctx.fillText('PERSONAL BEST: ' + best, W / 2, H * 0.55 + 45);
       }
     } else if (state === 'countdown') {
-      ctx.fillStyle = 'rgba(0,0,0,0.65)';
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
       ctx.fillRect(0, 0, W, H);
 
       const elapsed = performance.now() - countdownStartTime;
       const phaseElapsed = elapsed % 1000;
-      const scale = 1 + Math.max(0, (300 - phaseElapsed) / 300) * 0.6; // strong arcade pop
+      const scale = 1 + Math.max(0, (300 - phaseElapsed) / 300) * 0.5;
 
       ctx.save();
       ctx.translate(W / 2, H * 0.45);
       ctx.scale(scale, scale);
 
-      // Complementary neon colors
-      const hue = topBlock().hue;
-      ctx.fillStyle = `hsl(${(hue + 180) % 360}, 100%, 70%)`;
-      ctx.shadowColor = `hsl(${(hue + 180) % 360}, 100%, 50%)`;
-      ctx.shadowBlur = 25;
-      
-      ctx.font = '900 110px system-ui, sans-serif';
+      ctx.fillStyle = '#fbbf24';
+      ctx.font = '900 100px "Courier New", monospace';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(countdownVal, 0, 0);
       ctx.restore();
     } else {
-      ctx.fillStyle = 'rgba(255,255,255,0.92)';
-      ctx.font = '800 64px system-ui, sans-serif';
-      ctx.fillText(score, W / 2, H * 0.16);
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '900 56px "Courier New", monospace';
+      ctx.fillText(score, W / 2, H * 0.14);
 
       if (state === 'over') {
-        ctx.fillStyle = 'rgba(0,0,0,0.55)';
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.88)';
         ctx.fillRect(0, 0, W, H);
-        ctx.fillStyle = '#fff';
-        ctx.font = '800 40px system-ui, sans-serif';
-        ctx.fillText('Game Over', W / 2, H * 0.4);
-        ctx.font = '500 24px system-ui, sans-serif';
-        ctx.fillText('score: ' + score + '   best: ' + best, W / 2, H * 0.4 + 44);
+        ctx.fillStyle = '#ef4444';
+        ctx.font = '900 36px "Courier New", monospace';
+        ctx.fillText('SHIFT OVER', W / 2, H * 0.38);
+        ctx.fillStyle = '#f8fafc';
+        ctx.font = 'bold 20px "Courier New", monospace';
+        ctx.fillText('PALLETS: ' + score + ' | BEST: ' + best, W / 2, H * 0.38 + 45);
 
         if (performance.now() - overTime > 500 && !isModalOpen()) {
           const pulse = 0.5 + 0.5 * Math.sin(performance.now() / 350);
           ctx.globalAlpha = pulse;
-          ctx.font = '400 20px system-ui, sans-serif';
-          ctx.fillText('tap to play again', W / 2, H * 0.4 + 92);
+          ctx.font = 'bold 18px "Courier New", monospace';
+          ctx.fillStyle = '#fbbf24';
+          ctx.fillText('TAP TO RESTART SHIFT', W / 2, H * 0.38 + 100);
           ctx.globalAlpha = 1;
         }
       }
@@ -591,236 +618,150 @@
           });
         }
         
-        // Each person's name appears only once with their top score
         const playerTopMap = {};
         for (const entry of fetched) {
           const name = entry.name.toUpperCase();
           const score = parseInt(entry.score, 10);
           const timestamp = entry.timestamp || 0;
 
-          if (!playerTopMap[name] || score > playerTopMap[name].score || (score === playerTopMap[name].score && timestamp > playerTopMap[name].timestamp)) {
-            playerTopMap[name] = { name: name, score: score, timestamp: timestamp };
+          if (!playerTopMap[name] || score > playerTopMap[name].score || (score === playerTopMap[name].score && timestamp < playerTopMap[name].timestamp)) {
+            playerTopMap[name] = { score, timestamp };
           }
         }
 
-        const uniquePlayerScores = Object.values(playerTopMap);
-
-        // Sort descending by score, then descending by timestamp (last person first for ties)
-        uniquePlayerScores.sort((a, b) => {
-          if (b.score !== a.score) {
-            return b.score - a.score;
+        scoreToPlayer = {};
+        for (const [name, info] of Object.entries(playerTopMap)) {
+          if (!scoreToPlayer[info.score] || info.timestamp < scoreToPlayer[info.score].timestamp) {
+            scoreToPlayer[info.score] = name;
           }
-          return b.timestamp - a.timestamp;
-        });
-
-        processScores(uniquePlayerScores);
-      } catch (err) {
-        console.error("Error fetching online scores via REST API:", err);
-      }
-    } else {
-      const stored = localStorage.getItem('stack_online_scores_mock');
-      if (stored) {
-        localScores = JSON.parse(stored);
-      } else {
-        localStorage.setItem('stack_online_scores_mock', JSON.stringify(localScores));
-      }
-      
-      const playerTopMap = {};
-      for (const entry of localScores) {
-        const name = entry.name.toUpperCase();
-        const score = parseInt(entry.score, 10);
-        const timestamp = entry.timestamp || 0;
-        if (!playerTopMap[name] || score > playerTopMap[name].score || (score === playerTopMap[name].score && timestamp > playerTopMap[name].timestamp)) {
-          playerTopMap[name] = { name: name, score: score, timestamp: timestamp };
         }
-      }
-      const uniquePlayerScores = Object.values(playerTopMap);
-      uniquePlayerScores.sort((a, b) => {
-        if (b.score !== a.score) return b.score - a.score;
-        return b.timestamp - a.timestamp;
-      });
-      processScores(uniquePlayerScores);
-    }
-  }
-
-  function processScores(scoreList) {
-    scoreToPlayer = {};
-    for (const entry of scoreList) {
-      const s = parseInt(entry.score, 10);
-      if (!scoreToPlayer[s]) {
-        scoreToPlayer[s] = entry.name;
-      }
-    }
-  }
-
-  async function submitScore(name, scoreToSave) {
-    if (useDatabase) {
-      try {
-        await fetch(`${dbUrl}scores.json`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            name: name,
-            score: scoreToSave,
-            timestamp: Date.now()
-          })
-        });
-        await fetchScores();
       } catch (err) {
-        console.error("Error submitting score online:", err);
+        console.error("Failed to fetch online scores:", err);
       }
-    } else {
-      localScores.push({ name: name, score: scoreToSave, timestamp: Date.now() });
-      localStorage.setItem('stack_online_scores_mock', JSON.stringify(localScores));
-      
-      const playerTopMap = {};
-      for (const entry of localScores) {
-        const n = entry.name.toUpperCase();
-        const sc = parseInt(entry.score, 10);
-        const ts = entry.timestamp || 0;
-        if (!playerTopMap[n] || sc > playerTopMap[n].score || (sc === playerTopMap[n].score && ts > playerTopMap[n].timestamp)) {
-          playerTopMap[n] = { name: n, score: sc, timestamp: ts };
-        }
-      }
-      const uniquePlayerScores = Object.values(playerTopMap);
-      uniquePlayerScores.sort((a, b) => {
-        if (b.score !== a.score) return b.score - a.score;
-        return b.timestamp - a.timestamp;
+    }
+  }
+
+  async function submitScoreToDatabase(name, scoreVal) {
+    if (!useDatabase) return;
+    try {
+      await fetch(`${dbUrl}scores.json`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name.toUpperCase(), score: scoreVal, timestamp: Date.now() })
       });
-      processScores(uniquePlayerScores);
+      await fetchScores();
+    } catch (err) {
+      console.error("Failed to submit score:", err);
     }
   }
 
-  function handleGameOverScore() {
-    if (score <= 0) return;
-    
-    const savedName = localStorage.getItem('stack_player_name');
-    if (savedName) {
-      submitScore(savedName, score);
-    } else {
-      pendingScoreSubmit = score;
-      isChangingNameOnly = false;
-      showNameModal();
-    }
-  }
-
-  // ---- Name Modal Overlay System ----
-  const modal = document.getElementById('name-modal');
-  const modalTitle = document.getElementById('modal-title');
-  const modalDesc = document.getElementById('modal-desc');
-  const nameInput = document.getElementById('player-name-input');
-  const nameError = document.getElementById('name-error');
-  const submitBtn = document.getElementById('submit-name-btn');
-  const badgeName = document.getElementById('player-badge-name');
-  const profileBadge = document.getElementById('player-profile-badge');
-
-  function isModalOpen() {
-    return modal.style.display === 'flex';
-  }
-
-  function showNameModal() {
-    modal.style.display = 'flex';
-    nameInput.focus();
-    nameError.style.display = 'none';
-    nameError.innerText = '';
-    
-    if (isChangingNameOnly) {
-      modalTitle.innerText = "CHANGE NAME";
-      modalDesc.innerText = "Enter your new player name:";
-      nameInput.value = localStorage.getItem('stack_player_name') || "";
-    } else {
-      modalTitle.innerText = "NEW HIGH SCORE!";
-      modalDesc.innerText = `You scored ${pendingScoreSubmit}! Enter your name:`;
-      nameInput.value = "";
-    }
-  }
-
-  function hideNameModal() {
-    modal.style.display = 'none';
-    pendingScoreSubmit = null;
-    isChangingNameOnly = false;
-  }
+  // ---- Player Name & Modal Management ----
+  let playerName = localStorage.getItem('aldi_stack_player_name') || '';
+  const badgeNameEl = document.getElementById('player-badge-name');
+  const modalEl = document.getElementById('name-modal');
+  const nameInputEl = document.getElementById('player-name-input');
+  const nameErrorEl = document.getElementById('name-error');
+  const submitBtnEl = document.getElementById('submit-name-btn');
+  const playerBadgeEl = document.getElementById('player-profile-badge');
 
   function updateBadge() {
-    const name = localStorage.getItem('stack_player_name') || 'GUEST';
-    badgeName.innerText = name;
+    badgeNameEl.textContent = playerName ? playerName : 'GUEST';
+  }
+  updateBadge();
+
+  function isModalOpen() {
+    return modalEl.style.display === 'flex';
   }
 
-  nameInput.addEventListener('keypress', (e) => {
-    const charCode = e.charCode || e.keyCode;
-    const isLetter = (charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122);
-    if (!isLetter) {
-      e.preventDefault();
-      showError("Only letters (A-Z) allowed");
-    }
-  });
-
-  nameInput.addEventListener('input', () => {
-    const rawVal = nameInput.value;
-    const cleanVal = rawVal.replace(/[^a-zA-Z]/g, '').toUpperCase();
-    if (rawVal !== cleanVal) {
-      showError("Only letters (A-Z) allowed");
-    } else {
-      hideError();
-    }
-    nameInput.value = cleanVal;
-  });
-
-  function showError(msg) {
-    nameError.innerText = msg;
-    nameError.style.display = 'block';
-  }
-
-  function hideError() {
-    nameError.innerText = '';
-    nameError.style.display = 'none';
-  }
-
-  async function handleNameSubmit() {
-    const name = nameInput.value.trim().toUpperCase();
+  function openNameModal(isEditOnly = false) {
+    isChangingNameOnly = isEditOnly;
+    nameInputEl.value = playerName;
+    nameErrorEl.textContent = '';
     
-    if (name.length < 2) {
-      showError("Name must be at least 2 letters");
+    const titleEl = document.getElementById('modal-title');
+    const descEl = document.getElementById('modal-desc');
+    
+    if (isEditOnly) {
+      titleEl.textContent = 'LOADER PROFILE';
+      descEl.textContent = 'Enter your warehouse worker name (QWERTY only):';
+      submitBtnEl.textContent = 'SAVE';
+    } else {
+      titleEl.textContent = 'SHIFT RECORD!';
+      descEl.textContent = `You stacked ${score} pallets! Enter your name for the board:`;
+      submitBtnEl.textContent = 'SUBMIT';
+    }
+
+    modalEl.style.display = 'flex';
+    setTimeout(() => nameInputEl.focus(), 50);
+  }
+
+  function closeNameModal() {
+    modalEl.style.display = 'none';
+  }
+
+  playerBadgeEl.addEventListener('click', () => {
+    openNameModal(true);
+  });
+
+  async function handleGameOverScore() {
+    if (score <= 0) return;
+    
+    if (!playerName) {
+      pendingScoreSubmit = score;
+      openNameModal(false);
+    } else {
+      await submitScoreToDatabase(playerName, score);
+    }
+  }
+
+  submitBtnEl.addEventListener('click', async () => {
+    const raw = nameInputEl.value.trim();
+    if (!raw) {
+      nameErrorEl.textContent = 'Name cannot be empty.';
       return;
     }
-    if (isOffensive(name)) {
-      showError("Please choose a nicer name!");
+    if (!/^[a-zA-Z0-9\s]+$/.test(raw)) {
+      nameErrorEl.textContent = 'English QWERTY letters/numbers only.';
+      return;
+    }
+    if (isOffensive(raw)) {
+      nameErrorEl.textContent = 'Please choose a polite name.';
       return;
     }
 
-    localStorage.setItem('stack_player_name', name);
+    playerName = raw.toUpperCase().substring(0, 10);
+    localStorage.setItem('aldi_stack_player_name', playerName);
     updateBadge();
+    closeNameModal();
 
     if (!isChangingNameOnly && pendingScoreSubmit !== null) {
-      await submitScore(name, pendingScoreSubmit);
+      const s = pendingScoreSubmit;
+      pendingScoreSubmit = null;
+      await submitScoreToDatabase(playerName, s);
     }
-    
-    hideNameModal();
+  });
+
+  nameInputEl.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      submitBtnEl.click();
+    }
+  });
+
+  // ---- Main Loop ----
+  function loop() {
+    update();
+    draw();
+    requestAnimationFrame(loop);
   }
 
-  submitBtn.addEventListener('click', handleNameSubmit);
-  
-  nameInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleNameSubmit();
-    }
+  fetchScores().then(() => {
+    reset();
+    state = 'splash';
+    requestAnimationFrame(loop);
   });
 
-  profileBadge.addEventListener('click', () => {
-    isChangingNameOnly = true;
-    showNameModal();
-  });
-
-  // ---- Initial Boot ----
-  updateBadge();
-  fetchScores();
-  state = 'splash';
-  reset();
-  (function loop() { update(); draw(); requestAnimationFrame(loop); })();
 })();
 </script>
+
 </body>
 </html>
