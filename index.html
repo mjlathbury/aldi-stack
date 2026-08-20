@@ -173,12 +173,24 @@
   let offset, score, best, state, speed, shake, overTime, nextDir, baseWidth, perfectCombo;
   let countdownVal = 3, countdownStartTime = 0;
   let scrollText = [
-    "THE DELIVERY HAS JUST TURNED UP!",
-    "ALDI ALAN IS IN TROUBLE!",
-    "THE WAREHOUSE IS COMPLETELY FULL!",
-    "A MASSIVE TRUCK IS AT THE DOCKS!",
-    "HELP HIM STACK THE PALLETS!",
-    "GET THE DELIVERY INTO THE WAREHOUSE!",
+    "EPISODE IV: A NEW PALLET",
+    "",
+    "It is a period of civil warehouse war.",
+    "Rebel delivery trucks, striking from",
+    "the loading bay, have won their",
+    "first victory against the evil",
+    "Store Manager empire.",
+    "",
+    "During the battle, Aldi Alan, brave",
+    "stockroom hero, managed to steal",
+    "the ultimate warehouse secret:",
+    "THE INFINITE PALLET STACK.",
+    "",
+    "Pursued by the boss's relentless",
+    "stopwatch, Alan races toward the",
+    "forklift, custodian of his home,",
+    "and our only hope to save the aisle...",
+    "",
     "TAP TO BEGIN THE SHIFT!"
   ];
   let scrollPos = H + 50;
@@ -652,24 +664,45 @@
       ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
       ctx.fillRect(0, 0, W, H);
 
-      // Star Wars style scrolling text
+      // Star Wars style perspective crawl text
       ctx.save();
+      
+      // Clip to center area so text doesn't spill off sides
+      ctx.beginPath();
+      ctx.rect(W * 0.05, 20, W * 0.9, H * 0.7);
+      ctx.clip();
+
       ctx.translate(W / 2, scrollPos);
+
+      // Apply Star Wars perspective scale (shrinking as it goes up)
       
       for (let i = 0; i < scrollText.length; i++) {
-        const lineY = i * 50;
-        const alpha = Math.max(0, Math.min(1, 1 - Math.abs(lineY - 0) / 200));
+        const lineY = i * 42;
+        const currentY = scrollPos + lineY;
         
-        ctx.globalAlpha = alpha;
-        ctx.fillStyle = '#fbbf24';
-        ctx.font = '900 28px "Courier New", monospace';
-        ctx.fillText(scrollText[i], 0, lineY);
-        
-        // Glow effect
-        ctx.shadowColor = '#f97316';
-        ctx.shadowBlur = 15;
-        ctx.fillText(scrollText[i], 0, lineY);
-        ctx.shadowBlur = 0;
+        // Only render if roughly visible
+        if (currentY > -50 && currentY < H + 50) {
+          // Perspective scale based on height
+          const progress = Math.max(0, Math.min(1, currentY / H));
+          const scale = 0.5 + progress * 0.6;
+          const alpha = Math.max(0, Math.min(1, progress * 1.5));
+
+          ctx.save();
+          ctx.translate(0, lineY);
+          ctx.scale(scale, scale);
+
+          ctx.globalAlpha = alpha;
+          ctx.fillStyle = '#fbbf24'; // Classic yellow crawl
+          ctx.font = '700 22px "Courier New", monospace';
+          ctx.textAlign = 'center';
+
+          // Glow effect
+          ctx.shadowColor = '#f97316';
+          ctx.shadowBlur = 10;
+          ctx.fillText(scrollText[i], 0, 0);
+          
+          ctx.restore();
+        }
       }
       ctx.restore();
 
