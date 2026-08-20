@@ -352,17 +352,17 @@
     }
   }
 
-  // ---- Detailed Warehouse & Pallet Drawing ----
+  // ---- HD Pixel Art Warehouse & Pallet Drawing (Stardew Valley style) ----
   function drawWarehouseBackground() {
-    // 1. Warm cinder block wall (matches reference image tones)
-    ctx.fillStyle = '#4a4f47';
+    // 1. Warm cinder block wall with texture
+    ctx.fillStyle = '#8a8578';
     ctx.fillRect(0, 0, W, H);
 
     // Cinder block mortar lines - horizontal and vertical grid
-    ctx.strokeStyle = '#3a3f38';
+    ctx.strokeStyle = '#6a6558';
     ctx.lineWidth = 1;
-    const blockH = 26;
-    const blockW = 52;
+    const blockH = 28;
+    const blockW = 56;
     for (let y = 0; y < H; y += blockH) {
       ctx.beginPath();
       ctx.moveTo(0, y);
@@ -377,14 +377,14 @@
     }
 
     // 2. Concrete floor gradient (warm gray, matches reference)
-    const floorGrad = ctx.createLinearGradient(0, H * 0.6, 0, H);
-    floorGrad.addColorStop(0, '#5a554e');
-    floorGrad.addColorStop(1, '#443f39');
+    const floorGrad = ctx.createLinearGradient(0, H * 0.55, 0, H);
+    floorGrad.addColorStop(0, '#6a6558');
+    floorGrad.addColorStop(1, '#4a4538');
     ctx.fillStyle = floorGrad;
-    ctx.fillRect(0, H * 0.6, W, H * 0.4);
+    ctx.fillRect(0, H * 0.55, W, H * 0.45);
 
     // 3. Metal shelving - blue-gray uprights with orange shelf beams
-    ctx.fillStyle = '#4a6a8a'; // blue-gray steel uprights
+    ctx.fillStyle = '#4a6a8a';
     ctx.fillRect(28, 0, 16, H);
     ctx.fillRect(172, 0, 16, H);
 
@@ -468,40 +468,60 @@
   function drawPalletBlock(x, worldBottom, w, type) {
     const y = toScreenY(worldBottom, BLOCK_H);
 
-    // Wooden Pallet Structure (matches reference image)
-    // Top deck boards - light warm wood
-    ctx.fillStyle = '#d0a060';
-    ctx.fillRect(x, y, w, 10);
-    // Top deck shadow
-    ctx.fillStyle = '#b08040';
-    ctx.fillRect(x, y + 10, w, 4);
-
-    // Stringer boards with dark cutout gaps (matches reference)
-    ctx.fillStyle = '#1a1a1a';
-    const gapW = 22;
-    const gapH = 10;
-    for (let gx = x + 10; gx < x + w - 10; gx += gapW + 14) {
-      ctx.fillRect(gx, y + 14, gapW, gapH);
+    // === TOP DECK: Individual parallel slats with highlight/shadow ===
+    const slatH = 4;
+    const slatGap = 1;
+    const slatColors = ['#d4a060', '#c09050', '#b08040'];
+    for (let sy = 0; sy < 10; sy += slatH + slatGap) {
+      const colorIdx = sy % 3;
+      ctx.fillStyle = slatColors[colorIdx];
+      ctx.fillRect(x, y + sy, w, slatH);
+      // Top highlight on each slat
+      ctx.fillStyle = 'rgba(255,220,180,0.3)';
+      ctx.fillRect(x, y + sy, w, 1);
     }
 
-    // Bottom deck board
-    ctx.fillStyle = '#906030';
-    ctx.fillRect(x, y + 24, w, 12);
+    // === STRINGER LAYER: Horizontal boards with rectangular cutout gaps ===
+    ctx.fillStyle = '#a07030';
+    ctx.fillRect(x, y + 10, w, 6);
+    // Stringer cutout gaps (dark rectangular notches)
+    ctx.fillStyle = '#1a1a1a';
+    const gapW = 20;
+    const gapH = 8;
+    for (let gx = x + 8; gx < x + w - 8; gx += gapW + 12) {
+      ctx.fillRect(gx, y + 12, gapW, gapH);
+      // Inner wood edge on cutout
+      ctx.fillStyle = '#3a2010';
+      ctx.fillRect(gx, y + 12, gapW, 1);
+      ctx.fillRect(gx, y + 19, gapW, 1);
+      ctx.fillStyle = '#1a1a1a';
+    }
 
-    // Cargo Box / Cartons sitting on top of pallet
+    // === BOTTOM DECK: Bottom board with shadow ===
+    ctx.fillStyle = '#8a6030';
+    ctx.fillRect(x, y + 16, w, 8);
+    // Bottom shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.2)';
+    ctx.fillRect(x, y + 22, w, 2);
+
+    // === CARGO BOX / CARTONS sitting on top of pallet ===
     let boxColor = '#b08040';
     let labelColor = '#3a60a0';
     if (type === 'special') {
-      boxColor = '#d04080'; // Special buy pink
+      boxColor = '#d04080';
       labelColor = '#f0c040';
     } else if (type === 'drinks') {
-      boxColor = '#2050a0'; // Drink crates blue
+      boxColor = '#2050a0';
       labelColor = '#ffffff';
     }
 
-    // Box body
+    // Box body with 3D shading
     ctx.fillStyle = boxColor;
     ctx.fillRect(x + 4, y - 24, w - 8, 24);
+    // Box top highlight
+    ctx.fillStyle = 'rgba(255,255,255,0.15)';
+    ctx.fillRect(x + 4, y - 24, w - 8, 3);
+    // Box outline
     ctx.strokeStyle = '#4a2a10';
     ctx.lineWidth = 1;
     ctx.strokeRect(x + 4, y - 24, w - 8, 24);
