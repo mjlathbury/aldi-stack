@@ -193,8 +193,8 @@
     "",
     "TAP TO BEGIN THE SHIFT!"
   ];
-  let scrollPos = H + 50;
-  let scrollSpeed = 1.2;
+  let scrollPos = H + 100;
+  let scrollSpeed = 0.65; // Slower, readable scroll speed
   let scrollActive = true;
   best = parseInt(localStorage.getItem('aldi_stack_best') || '0', 10);
 
@@ -367,9 +367,10 @@
     // Scroll text animation for splash screen
     if (state === 'splash' && scrollActive) {
       scrollPos -= scrollSpeed;
-      // When all text has scrolled off, reset for a continuous loop
-      if (scrollPos < -200) {
-        scrollPos = H + 50;
+      // When all text has scrolled completely off into the distance, restart crawl
+      const totalHeight = scrollText.length * 42;
+      if (scrollPos < -totalHeight - 100) {
+        scrollPos = H + 100;
       }
     }
 
