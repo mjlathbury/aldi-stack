@@ -193,8 +193,8 @@
     "",
     "TAP TO BEGIN THE SHIFT!"
   ];
-  let scrollPos = H + 100;
-  let scrollSpeed = 0.5; // Slow, cinematic Star Wars crawl speed
+  let scrollPos = H + 400;
+  let scrollSpeed = 0.3; // Very slow, cinematic Star Wars crawl
   let scrollActive = true;
   best = parseInt(localStorage.getItem('aldi_stack_best') || '0', 10);
 
@@ -368,9 +368,9 @@
     if (state === 'splash' && scrollActive) {
       scrollPos -= scrollSpeed;
       // When all text has scrolled completely off into the distance, restart crawl
-      const totalHeight = scrollText.length * 45;
+      const totalHeight = scrollText.length * 40;
       if (scrollPos < -totalHeight) {
-        scrollPos = H + 100;
+        scrollPos = H + 400;
       }
     }
 
@@ -665,12 +665,12 @@
       ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
       ctx.fillRect(0, 0, W, H);
 
-      // Star Wars style perspective crawl text
+      // Star Wars style perspective crawl text - top half only
       ctx.save();
       
-      // Clip to center area so text doesn't spill off sides
+      // Clip to top half of screen so text doesn't overlap title
       ctx.beginPath();
-      ctx.rect(W * 0.05, 20, W * 0.9, H * 0.7);
+      ctx.rect(W * 0.05, 20, W * 0.9, H * 0.5);
       ctx.clip();
 
       ctx.translate(W / 2, scrollPos);
@@ -678,13 +678,13 @@
       // Apply Star Wars perspective scale (shrinking as it goes up)
       
       for (let i = 0; i < scrollText.length; i++) {
-        const lineY = i * 42;
+        const lineY = i * 40;
         const currentY = scrollPos + lineY;
         
         // Only render if roughly visible
         if (currentY > -50 && currentY < H + 50) {
           // Perspective scale based on height
-          const progress = Math.max(0, Math.min(1, currentY / H));
+          const progress = Math.max(0, Math.min(1, currentY / (H * 0.5)));
           const scale = 0.5 + progress * 0.6;
           const alpha = Math.max(0, Math.min(1, progress * 1.5));
 
@@ -707,28 +707,28 @@
       }
       ctx.restore();
 
-      // Title
+      // Title - positioned below scroll area
       ctx.fillStyle = '#fbbf24';
       ctx.font = '900 42px "Courier New", monospace';
-      ctx.fillText('ALDI WAREHOUSE', W / 2, H * 0.55);
+      ctx.fillText('ALDI WAREHOUSE', W / 2, H * 0.62);
       ctx.fillStyle = '#f97316';
-      ctx.fillText('STACKER', W / 2, H * 0.55 + 44);
+      ctx.fillText('STACKER', W / 2, H * 0.62 + 44);
 
       ctx.font = 'bold 13px "Courier New", monospace';
       ctx.fillStyle = '#38bdf8';
-      ctx.fillText('ONLINE LEADERBOARD EDITION', W / 2, H * 0.55 + 84);
+      ctx.fillText('ONLINE LEADERBOARD EDITION', W / 2, H * 0.62 + 84);
 
       const pulse = 0.6 + 0.4 * Math.sin(performance.now() / 300);
       ctx.globalAlpha = pulse;
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 20px "Courier New", monospace';
-      ctx.fillText('TAP TO START SHIFT', W / 2, H * 0.75);
+      ctx.fillText('TAP TO START SHIFT', W / 2, H * 0.82);
       ctx.globalAlpha = 1;
 
       if (best > 0) {
         ctx.fillStyle = '#94a3b8';
         ctx.font = '16px "Courier New", monospace';
-        ctx.fillText('PERSONAL BEST: ' + best, W / 2, H * 0.75 + 45);
+        ctx.fillText('PERSONAL BEST: ' + best, W / 2, H * 0.82 + 45);
       }
     } else if (state === 'countdown') {
       ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
