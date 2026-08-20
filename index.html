@@ -172,6 +172,18 @@
   let stack, current, debris, floaters, particles;
   let offset, score, best, state, speed, shake, overTime, nextDir, baseWidth, perfectCombo;
   let countdownVal = 3, countdownStartTime = 0;
+  let scrollText = [
+    "THE DELIVERY HAS JUST TURNED UP!",
+    "ALDI ALAN IS IN TROUBLE!",
+    "THE WAREHOUSE IS COMPLETELY FULL!",
+    "A MASSIVE TRUCK IS AT THE DOCKS!",
+    "HELP HIM STACK THE PALLETS!",
+    "GET THE DELIVERY INTO THE WAREHOUSE!",
+    "TAP TO BEGIN THE SHIFT!"
+  ];
+  let scrollPos = H + 50;
+  let scrollSpeed = 1.2;
+  let scrollActive = true;
   best = parseInt(localStorage.getItem('aldi_stack_best') || '0', 10);
 
   let scoreToPlayer = {};
@@ -197,6 +209,8 @@
     score = 0; speed = 2.0; shake = 0; offset = 0; perfectCombo = 0;
     nextDir = Math.random() < 0.5 ? 1 : -1;
     debris = []; floaters = []; particles = [];
+    scrollPos = H + 50;
+    scrollActive = true;
     spawnCurrent();
   }
 
@@ -337,6 +351,15 @@
       if (f.life <= 0) floaters.splice(i, 1);
     }
     if (shake > 0) shake *= 0.9;
+
+    // Scroll text animation for splash screen
+    if (state === 'splash' && scrollActive) {
+      scrollPos -= scrollSpeed;
+      // When all text has scrolled off, reset for a continuous loop
+      if (scrollPos < -200) {
+        scrollPos = H + 50;
+      }
+    }
 
     if (state === 'countdown') {
       const elapsed = performance.now() - countdownStartTime;
@@ -577,21 +600,29 @@
   }
 
   function draw() {
-    drawWarehouseBackground();
+    if (state !== 'splash') {
+      drawWarehouseBackground();
+    } else {
+      // Dark background for splash screen
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, W, H);
+    }
 
     ctx.save();
     if (shake > 0.01)
       ctx.translate((Math.random() - 0.5) * shake * 12, (Math.random() - 0.5) * shake * 12);
 
-    for (let i = 0; i < stack.length; i++) {
-      const b = stack[i];
-      drawPalletBlock(b.x, i * BLOCK_H, b.width, b.type);
-    }
-    if (current && state !== 'over' && state !== 'countdown')
-      drawPalletBlock(current.x, stack.length * BLOCK_H, current.width, current.type);
-    for (const d of debris) drawDebris(d);
+    if (state !== 'splash') {
+      for (let i = 0; i < stack.length; i++) {
+        const b = stack[i];
+        drawPalletBlock(b.x, i * BLOCK_H, b.width, b.type);
+      }
+      if (current && state !== 'over' && state !== 'countdown')
+        drawPalletBlock(current.x, stack.length * BLOCK_H, current.width, current.type);
+      for (const d of debris) drawDebris(d);
 
-    drawHighScoreLines();
+      drawHighScoreLines();
+    }
 
     for (const p of particles) {
       ctx.globalAlpha = Math.max(p.life, 0);
@@ -621,27 +652,49 @@
       ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
       ctx.fillRect(0, 0, W, H);
 
+      // Star Wars style scrolling text
+      ctx.save();
+      ctx.translate(W / 2, scrollPos);
+      
+      for (let i = 0; i < scrollText.length; i++) {
+        const lineY = i * 50;
+        const alpha = Math.max(0, Math.min(1, 1 - Math.abs(lineY - 0) / 200));
+        
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = '#fbbf24';
+        ctx.font = '900 28px "Courier New", monospace';
+        ctx.fillText(scrollText[i], 0, lineY);
+        
+        // Glow effect
+        ctx.shadowColor = '#f97316';
+        ctx.shadowBlur = 15;
+        ctx.fillText(scrollText[i], 0, lineY);
+        ctx.shadowBlur = 0;
+      }
+      ctx.restore();
+
+      // Title
       ctx.fillStyle = '#fbbf24';
       ctx.font = '900 42px "Courier New", monospace';
-      ctx.fillText('ALDI WAREHOUSE', W / 2, H * 0.28);
+      ctx.fillText('ALDI WAREHOUSE', W / 2, H * 0.85);
       ctx.fillStyle = '#f97316';
-      ctx.fillText('STACKER', W / 2, H * 0.28 + 44);
+      ctx.fillText('STACKER', W / 2, H * 0.85 + 44);
 
       ctx.font = 'bold 13px "Courier New", monospace';
       ctx.fillStyle = '#38bdf8';
-      ctx.fillText('ONLINE LEADERBOARD EDITION', W / 2, H * 0.28 + 84);
+      ctx.fillText('ONLINE LEADERBOARD EDITION', W / 2, H * 0.85 + 84);
 
       const pulse = 0.6 + 0.4 * Math.sin(performance.now() / 300);
       ctx.globalAlpha = pulse;
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 20px "Courier New", monospace';
-      ctx.fillText('TAP TO START SHIFT', W / 2, H * 0.55);
+      ctx.fillText('TAP TO START SHIFT', W / 2, H * 0.95);
       ctx.globalAlpha = 1;
 
       if (best > 0) {
         ctx.fillStyle = '#94a3b8';
         ctx.font = '16px "Courier New", monospace';
-        ctx.fillText('PERSONAL BEST: ' + best, W / 2, H * 0.55 + 45);
+        ctx.fillText('PERSONAL BEST: ' + best, W / 2, H * 0.95 + 45);
       }
     } else if (state === 'countdown') {
       ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
