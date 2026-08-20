@@ -193,8 +193,8 @@
     "",
     "TAP TO BEGIN THE SHIFT!"
   ];
-  let scrollPos = H + 250;
-  let scrollSpeed = 0.4; // Even slower and more relaxed reading pace
+  let scrollPos = H + 100;
+  let scrollSpeed = 0.5; // Slow, cinematic Star Wars crawl speed
   let scrollActive = true;
   best = parseInt(localStorage.getItem('aldi_stack_best') || '0', 10);
 
@@ -369,8 +369,8 @@
       scrollPos -= scrollSpeed;
       // When all text has scrolled completely off into the distance, restart crawl
       const totalHeight = scrollText.length * 45;
-      if (scrollPos < -totalHeight - 200) {
-        scrollPos = H + 250;
+      if (scrollPos < -totalHeight) {
+        scrollPos = H + 100;
       }
     }
 
@@ -710,25 +710,25 @@
       // Title
       ctx.fillStyle = '#fbbf24';
       ctx.font = '900 42px "Courier New", monospace';
-      ctx.fillText('ALDI WAREHOUSE', W / 2, H * 0.85);
+      ctx.fillText('ALDI WAREHOUSE', W / 2, H * 0.55);
       ctx.fillStyle = '#f97316';
-      ctx.fillText('STACKER', W / 2, H * 0.85 + 44);
+      ctx.fillText('STACKER', W / 2, H * 0.55 + 44);
 
       ctx.font = 'bold 13px "Courier New", monospace';
       ctx.fillStyle = '#38bdf8';
-      ctx.fillText('ONLINE LEADERBOARD EDITION', W / 2, H * 0.85 + 84);
+      ctx.fillText('ONLINE LEADERBOARD EDITION', W / 2, H * 0.55 + 84);
 
       const pulse = 0.6 + 0.4 * Math.sin(performance.now() / 300);
       ctx.globalAlpha = pulse;
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 20px "Courier New", monospace';
-      ctx.fillText('TAP TO START SHIFT', W / 2, H * 0.95);
+      ctx.fillText('TAP TO START SHIFT', W / 2, H * 0.75);
       ctx.globalAlpha = 1;
 
       if (best > 0) {
         ctx.fillStyle = '#94a3b8';
         ctx.font = '16px "Courier New", monospace';
-        ctx.fillText('PERSONAL BEST: ' + best, W / 2, H * 0.95 + 45);
+        ctx.fillText('PERSONAL BEST: ' + best, W / 2, H * 0.75 + 45);
       }
     } else if (state === 'countdown') {
       ctx.fillStyle = 'rgba(15, 23, 42, 0.8)';
